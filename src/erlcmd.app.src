@@ -1,0 +1,14 @@
+{application, erlcmd,
+ [{description, "A simple tool function like os:cmd return with exit status code of process."},
+  {vsn, git},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
