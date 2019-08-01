@@ -24,6 +24,6 @@ Add the following script into your rebar.config if you wanna manage your project
 
 ```erlang
 {deps, [
-    {erlcmd, "0.1", {git, "https://github.com/pzlib/erlcmd.git", {tag, "0.1"}}}
+    {erlcmd, "*", {git, "https://github.com/pzlib/erlcmd.git", {tag, "0.1"}}}
 ]}.
 ```
