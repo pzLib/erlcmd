@@ -1,6 +1,6 @@
 %%%-------------------------------------------------------------------
-%%% @author Peng Zheng (彭峥)
-%%% @copyright (C) 2019, https://github.com/pzLib/erlcmd.git
+%%% @author Peng Zheng ( https://github.com/pzLib/ )
+%%% @copyright (C) 2019,
 %%% @doc
 %%% A simple tool function like os:cmd return with exit status code of process.
 %%% @end
@@ -10,7 +10,8 @@
 -module(cmd).
 
 -export([
-    run/2
+    run/2,
+    run/3
 ]).
 
 
@@ -19,12 +20,28 @@
     Timeout :: non_neg_integer()
 ) ->
     {ok, ExitStatus :: number(), Output :: string()}
-    | {error, timeout}.
+    | {error, timeout | unknown_exe}.
 run(Cmd, Timeout) when is_integer(Timeout), Timeout > 0, is_list(Cmd) ->
-    [Filename | Args] = string:split(Cmd, " ", all),
-    Exe = os:find_executable(Filename),
-    Port = open_port({spawn_executable, Exe}, [exit_status, use_stdio, stderr_to_stdout, {args, Args}]),
-    wait_for(Port, Timeout, "").
+    [Exe | Args] = string:split(Cmd, " ", all),
+    run(Exe, Args, Timeout).
+
+
+-spec run(
+    Exe :: string(),
+    Args :: [string()],
+    Timeout :: non_neg_integer()
+) ->
+    {ok, ExitStatus :: number(), Output :: string()}
+    | {error, timeout | unknown_exe}.
+run(Exe, Args, Timeout) ->
+    case os:find_executable(Exe) of
+        false ->
+            {error, unknown_exe};
+
+        Filename ->
+            Port = open_port({spawn_executable, Filename}, [exit_status, use_stdio, stderr_to_stdout, {args, Args}]),
+            wait_for(Port, Timeout, "")
+    end.
 
 
 wait_for(Port, Timeout, Output) ->
