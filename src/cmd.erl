@@ -15,12 +15,6 @@
 ]).
 
 
--spec run(
-    Cmd :: string(),
-    Timeout :: non_neg_integer()
-) ->
-    {ok, ExitStatus :: number(), Output :: string()}
-    | {error, timeout | unknown_exe}.
 run(Cmd, Timeout) when is_integer(Timeout), Timeout > 0, is_list(Cmd) ->
     [Exe | Args] = string:split(Cmd, " ", all),
     run(Exe, Args, Timeout).
@@ -32,7 +26,7 @@ run(Cmd, Timeout) when is_integer(Timeout), Timeout > 0, is_list(Cmd) ->
     Timeout :: non_neg_integer()
 ) ->
     {ok, ExitStatus :: number(), Output :: string()}
-    | {error, timeout | unknown_exe}.
+    | {error, timeout}.
 run(Exe, Args, Timeout) ->
     Port = open_port({spawn_executable, Exe}, [exit_status, use_stdio, stderr_to_stdout, {args, Args}]),
     wait_for(Port, Timeout, "").
