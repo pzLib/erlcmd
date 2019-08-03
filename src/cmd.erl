@@ -34,15 +34,9 @@ run(Cmd, Timeout) when is_integer(Timeout), Timeout > 0, is_list(Cmd) ->
     {ok, ExitStatus :: number(), Output :: string()}
     | {error, timeout | unknown_exe}.
 run(Exe, Args, Timeout) ->
-    case os:find_executable(Exe) of
-        false ->
-            {error, unknown_exe};
-
-        Filename ->
-            Port = open_port({spawn_executable, Filename}, [exit_status, use_stdio, stderr_to_stdout, {args, Args}]),
-            wait_for(Port, Timeout, "")
-    end.
-
+    Port = open_port({spawn_executable, Exe}, [exit_status, use_stdio, stderr_to_stdout, {args, Args}]),
+    wait_for(Port, Timeout, "").
+    
 
 wait_for(Port, Timeout, Output) ->
     receive
