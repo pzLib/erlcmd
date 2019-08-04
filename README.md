@@ -1,21 +1,24 @@
 # erlcmd
 
-A simple tool function like os:cmd return with exit status code of process.
+Erlcmd includes a simple tool function `cmd:run`. It likes `os:cmd` but returns exit status code and stdio output.
 
 ## How to use
 
 Download src/cmd.erl to your local disk then run:
 
 ```erlang
-{ok, ExitStatus, Output} = cmd:run("ls -a ./src", 5000), 
-io:format("exit status code: ~p~noutput: ~n~s~n", [ExitStatus, Output]).
+Exe = os:find_executable("ls"),
+CmdLine = Exe ++ " -a ./src",
+{ok, ExitStatus, Output} = cmd:run(CmdLine, 1000),
+io:format("exit status code: ~p~noutput: ~n~s", [ExitStatus, Output]).
 ``` 
 
 Or like this:
 
 ```erlang
-{ok, ExitStatus, Output} = cmd:run("ls", ["-a", "./src"], 5000), 
-io:format("exit status code: ~p~noutput: ~n~s~n", [ExitStatus, Output]).
+Exe = os:find_executable("ls"),
+{ok, ExitStatus, Output} = cmd:run(Exe, ["-a", "./src"], 5000), 
+io:format("exit status code: ~p~noutput: ~n~s", [ExitStatus, Output]).
 ``` 
 
 ## rebar.config

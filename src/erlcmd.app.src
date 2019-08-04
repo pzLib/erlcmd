@@ -1,5 +1,5 @@
 {application, erlcmd,
- [{description, "A simple tool function like os:cmd return with exit status code of process."},
+ [{description, "cmd:run (like os:cmd) returns exit status code and stdio output."},
   {vsn, git},
   {registered, []},
   {applications,
